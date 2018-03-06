@@ -1,4 +1,4 @@
-package wrappedgolint
+package main
 
 /*
 
@@ -22,13 +22,13 @@ import (
 	"strings"
 )
 
-var buildContext = build.Default
-
 var (
-	goroot		= filepath.Clean(runtime.GOROOT())
-	gorootSrc	= filepath.Join(goroot, "src")
+	buildContext = build.Default
+	goroot       = filepath.Clean(runtime.GOROOT())
+	gorootSrc    = filepath.Join(goroot, "src")
 )
 
+// importPathsNoDotExpansion returns the import paths to use for the given
 // command line, but it does no ... expansion.
 func importPathsNoDotExpansion(args []string) []string {
 	if len(args) == 0 {
@@ -61,6 +61,7 @@ func importPathsNoDotExpansion(args []string) []string {
 	return out
 }
 
+// importPaths returns the import paths to use for the given command line.
 func importPaths(args []string) []string {
 	args = importPathsNoDotExpansion(args)
 	var out []string
@@ -147,10 +148,10 @@ func matchPackages(pattern string) []string {
 	}
 
 	have := map[string]bool{
-		"builtin": true,	// ignore pseudo-package that exists only for documentation
+		"builtin": true, // ignore pseudo-package that exists only for documentation
 	}
 	if !buildContext.CgoEnabled {
-		have["runtime/cgo"] = true	// ignore during walk
+		have["runtime/cgo"] = true // ignore during walk
 	}
 	var pkgs []string
 

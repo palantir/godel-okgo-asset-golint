@@ -5,10 +5,10 @@
 // https://developers.google.com/open-source/licenses/bsd.
 
 // golint lints the Go source files named on its command line.
-package amalgomated
+package main
 
 import (
-	"github.com/palantir/godel-okgo-asset-golint/generated_src/internal/github.com/golang/lint/amalgomated_flag"
+	"flag"
 	"fmt"
 	"go/build"
 	"io/ioutil"
@@ -20,9 +20,9 @@ import (
 )
 
 var (
-	minConfidence	= flag.Float64("min_confidence", 0.8, "minimum confidence of a problem to print it")
-	setExitStatus	= flag.Bool("set_exit_status", false, "set exit status to 1 if any issues are found")
-	suggestions	int
+	minConfidence = flag.Float64("min_confidence", 0.8, "minimum confidence of a problem to print it")
+	setExitStatus = flag.Bool("set_exit_status", false, "set exit status to 1 if any issues are found")
+	suggestions   int
 )
 
 func usage() {
@@ -35,7 +35,7 @@ func usage() {
 	flag.PrintDefaults()
 }
 
-func AmalgomatedMain() {
+func main() {
 	flag.Usage = usage
 	flag.Parse()
 

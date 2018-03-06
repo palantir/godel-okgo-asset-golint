@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/golang/lint"
+  packages = ["golint"]
+  revision = "fb4f8c1d3a179654f93ef7e91d68fc7b1de6e88f"
+
+[[projects]]
   name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
   revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
@@ -69,6 +75,12 @@
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/lint"
+  packages = ["."]
+  revision = "fb4f8c1d3a179654f93ef7e91d68fc7b1de6e88f"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
   revision = "dd2ff4accc098aceecb86b36eaa7829b2a17b1c9"
@@ -94,6 +106,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "b8deb8c3134ca70b5542704ceb7a12fa63664ccf93b53e73fc008f6f765007e9"
+  inputs-digest = "0b6348202cae8e6bb59ca08a4cd795fe1917aecc1bbd4a122e9a5a66512068a1"
   solver-name = "gps-cdcl"
   solver-version = 1
