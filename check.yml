@@ -1,4 +1,4 @@
 packages:
   golint:
-    main: github.com/golang/lint/golint
+    main: golang.org/x/lint/golint
     distance-to-project-pkg: 1

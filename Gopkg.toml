@@ -20,7 +20,7 @@
 #  name = "github.com/x/y"
 #  version = "2.4.0"
 
-required = ["github.com/golang/lint/golint"]
+required = ["golang.org/x/lint"]
 
 [[constraint]]
   name = "github.com/palantir/amalgomate"

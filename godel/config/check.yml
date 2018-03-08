@@ -7,4 +7,4 @@ checks:
     args:
       # ignore packages added for generation
       - "--ignore"
-      - "./vendor/github.com/golang/lint"
+      - "./vendor/golang.org/x/lint"
