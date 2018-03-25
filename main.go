@@ -22,7 +22,8 @@ import (
 	"github.com/palantir/pkg/cobracli"
 
 	"github.com/palantir/godel-okgo-asset-golint/generated_src"
-	"github.com/palantir/godel-okgo-asset-golint/golint"
+	"github.com/palantir/godel-okgo-asset-golint/golint/config"
+	"github.com/palantir/godel-okgo-asset-golint/golint/creator"
 )
 
 func main() {
@@ -32,6 +33,6 @@ func main() {
 func checkMain(osArgs []string) int {
 	os.Args = osArgs
 	var debugFlagVal bool
-	rootCmd := checker.AssetRootCmd(golint.Creator(), "run golint check")
+	rootCmd := checker.AssetRootCmd(creator.Golint(), config.UpgradeConfig, "run golint check")
 	return cobracli.ExecuteWithDefaultParamsWithVersion(rootCmd, &debugFlagVal, "")
 }
