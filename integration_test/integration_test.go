@@ -18,13 +18,14 @@ import (
 	"testing"
 
 	"github.com/nmiyake/pkg/gofiles"
+	"github.com/palantir/godel/framework/pluginapitester"
 	"github.com/palantir/godel/pkg/products"
 	"github.com/palantir/okgo/okgotester"
 	"github.com/stretchr/testify/require"
 )
 
 const (
-	okgoPluginLocator  = "com.palantir.okgo:okgo-plugin:0.3.0"
+	okgoPluginLocator  = "com.palantir.okgo:check-plugin:1.0.0-rc3"
 	okgoPluginResolver = "https://palantir.bintray.com/releases/{{GroupPath}}/{{Product}}/{{Version}}/{{Product}}-{{Version}}-{{OS}}-{{Arch}}.tgz"
 
 	godelYML = `exclude:
@@ -36,18 +37,23 @@ const (
 `
 )
 
-func TestGolint(t *testing.T) {
+func TestCheck(t *testing.T) {
 	assetPath, err := products.Bin("golint-asset")
 	require.NoError(t, err)
 
 	configFiles := map[string]string{
-		"godel/config/godel.yml": godelYML,
-		"godel/config/check.yml": "",
+		"godel/config/godel.yml":        godelYML,
+		"godel/config/check-plugin.yml": "",
 	}
 
+	pluginProvider, err := pluginapitester.NewPluginProviderFromLocator(okgoPluginLocator, okgoPluginResolver)
+	require.NoError(t, err)
+
 	okgotester.RunAssetCheckTest(t,
-		okgoPluginLocator, okgoPluginResolver,
-		assetPath, "golint",
+		pluginProvider,
+		pluginapitester.NewAssetProvider(assetPath),
+		"golint",
+		"",
 		[]okgotester.AssetTestCase{
 			{
 				Name: "lint failures",
@@ -62,6 +68,7 @@ func TestGolint(t *testing.T) {
 				WantOutput: `Running golint...
 foo.go:1:14: exported function Foo should have comment or be unexported
 Finished golint
+Check(s) produced output: [golint]
 `,
 			},
 			{
@@ -81,7 +88,135 @@ Finished golint
 				WantOutput: `Running golint...
 ../foo.go:1:14: exported function Foo should have comment or be unexported
 Finished golint
+Check(s) produced output: [golint]
 `,
+			},
+		},
+	)
+}
+
+func TestUpgradeConfig(t *testing.T) {
+	pluginProvider, err := pluginapitester.NewPluginProviderFromLocator(okgoPluginLocator, okgoPluginResolver)
+	require.NoError(t, err)
+
+	assetPath, err := products.Bin("golint-asset")
+	require.NoError(t, err)
+	assetProvider := pluginapitester.NewAssetProvider(assetPath)
+
+	pluginapitester.RunUpgradeConfigTest(t,
+		pluginProvider,
+		[]pluginapitester.AssetProvider{assetProvider},
+		[]pluginapitester.UpgradeConfigTestCase{
+			{
+				Name: `legacy configuration with empty "args" field is updated`,
+				ConfigFiles: map[string]string{
+					"godel/config/godel.yml": godelYML,
+					"godel/config/check-plugin.yml": `
+legacy-config: true
+checks:
+  golint:
+    filters:
+      - value: "should have comment or be unexported"
+      - type: name
+        value: ".*.pb.go"
+`,
+				},
+				WantOutput: `Upgraded configuration for check-plugin.yml
+`,
+				WantFiles: map[string]string{
+					"godel/config/check-plugin.yml": `release-tag: ""
+checks:
+  golint:
+    skip: false
+    priority: null
+    config: {}
+    filters:
+    - type: ""
+      value: should have comment or be unexported
+    exclude:
+      names:
+      - .*.pb.go
+      paths: []
+exclude:
+  names: []
+  paths: []
+`,
+				},
+			},
+			{
+				Name: `legacy configuration with non-empty "args" field fails`,
+				ConfigFiles: map[string]string{
+					"godel/config/godel.yml": godelYML,
+					"godel/config/check-plugin.yml": `
+legacy-config: true
+checks:
+  golint:
+    args:
+      - "-foo"
+`,
+				},
+				WantError: true,
+				WantOutput: `Failed to upgrade configuration:
+	godel/config/check-plugin.yml: failed to upgrade check "golint" legacy configuration: failed to upgrade asset configuration: golint-asset does not support legacy configuration with a non-empty "args" field
+`,
+				WantFiles: map[string]string{
+					"godel/config/check-plugin.yml": `
+legacy-config: true
+checks:
+  golint:
+    args:
+      - "-foo"
+`,
+				},
+			},
+			{
+				Name: `empty v0 config works`,
+				ConfigFiles: map[string]string{
+					"godel/config/godel.yml": godelYML,
+					"godel/config/check-plugin.yml": `
+checks:
+  golint:
+    skip: true
+    # comment preserved
+    config:
+`,
+				},
+				WantOutput: ``,
+				WantFiles: map[string]string{
+					"godel/config/check-plugin.yml": `
+checks:
+  golint:
+    skip: true
+    # comment preserved
+    config:
+`,
+				},
+			},
+			{
+				Name: `non-empty v0 config does not work`,
+				ConfigFiles: map[string]string{
+					"godel/config/godel.yml": godelYML,
+					"godel/config/check-plugin.yml": `
+checks:
+  golint:
+    config:
+      # comment
+      key: value
+`,
+				},
+				WantError: true,
+				WantOutput: `Failed to upgrade configuration:
+	godel/config/check-plugin.yml: failed to upgrade check "golint" configuration: failed to upgrade asset configuration: golint-asset does not currently support configuration
+`,
+				WantFiles: map[string]string{
+					"godel/config/check-plugin.yml": `
+checks:
+  golint:
+    config:
+      # comment
+      key: value
+`,
+				},
 			},
 		},
 	)
