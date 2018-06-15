@@ -23,9 +23,9 @@ import (
 )
 
 var (
-	buildContext = build.Default
-	goroot       = filepath.Clean(runtime.GOROOT())
-	gorootSrc    = filepath.Join(goroot, "src")
+	buildContext	= build.Default
+	goroot		= filepath.Clean(runtime.GOROOT())
+	gorootSrc	= filepath.Join(goroot, "src")
 )
 
 // command line, but it does no ... expansion.
@@ -146,10 +146,10 @@ func matchPackages(pattern string) []string {
 	}
 
 	have := map[string]bool{
-		"builtin": true, // ignore pseudo-package that exists only for documentation
+		"builtin": true,	// ignore pseudo-package that exists only for documentation
 	}
 	if !buildContext.CgoEnabled {
-		have["runtime/cgo"] = true // ignore during walk
+		have["runtime/cgo"] = true	// ignore during walk
 	}
 	var pkgs []string
 
