@@ -111,22 +111,6 @@
   revision = "6ef6fc2811e260af0641aae25a45881217b3cf3d"
 
 [[projects]]
-  name = "github.com/palantir/godel-okgo-asset-golint"
-  packages = [
-    "generated_src",
-    "generated_src/internal/golang.org/x/lint",
-    "generated_src/internal/golang.org/x/lint/amalgomated_flag",
-    "generated_src/internal/golang.org/x/lint/golint",
-    "golint",
-    "golint/config",
-    "golint/config/internal/legacy",
-    "golint/config/internal/v0",
-    "golint/creator",
-  ]
-  revision = "9bfef2bf1dc6edd8fcb2ec0bf74edf86892a5200"
-  version = "v1.1.0"
-
-[[projects]]
   name = "github.com/palantir/okgo"
   packages = [
     "checker",
@@ -234,6 +218,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "840b6769014d65af80ec91f484048d1bc17656f373c77d196ad4a0dec78b2f98"
+  inputs-digest = "96041a8137786e1d0bc099d0b05dc0613e25a7bff4714c08c2885d67a171772e"
   solver-name = "gps-cdcl"
   solver-version = 1
