@@ -21,7 +21,7 @@ import (
 	"github.com/palantir/okgo/checker"
 	"github.com/palantir/pkg/cobracli"
 
-	"github.com/palantir/godel-okgo-asset-golint/generated_src"
+	amalgomatedcheck "github.com/palantir/godel-okgo-asset-golint/generated_src"
 	"github.com/palantir/godel-okgo-asset-golint/golint/config"
 	"github.com/palantir/godel-okgo-asset-golint/golint/creator"
 )
