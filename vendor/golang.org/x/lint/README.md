@@ -4,9 +4,12 @@ Golint is a linter for Go source code.
 
 ## Installation
 
-Golint requires Go 1.6 or later.
+Golint requires a
+[supported release of Go](https://golang.org/doc/devel/release.html#policy).
 
     go get -u golang.org/x/lint/golint
+
+To find out where `golint` was installed you can run `go list -f {{.Target}} golang.org/x/lint/golint`. For `golint` to be used globally add that directory to the `$PATH` environment setting.
 
 ## Usage
 
@@ -60,7 +63,7 @@ before we can accept your contribution.
 
 Add this to your ~/.vimrc:
 
-    set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
+    set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim
 
 If you have multiple entries in your GOPATH, replace `$GOPATH` with the right value.
 
@@ -75,7 +78,7 @@ Optionally, add this to your `~/.vimrc` to automatically run `golint` on `:w`
 
 Add this to your `.emacs` file:
 
-    (add-to-list 'load-path (concat (getenv "GOPATH")  "/src/github.com/golang/lint/misc/emacs"))
+    (add-to-list 'load-path (concat (getenv "GOPATH")  "/src/golang.org/x/lint/misc/emacs/"))
     (require 'golint)
 
 If you have multiple entries in your GOPATH, replace `$GOPATH` with the right value.
