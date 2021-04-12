@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sort"
 
-	golint "github.com/palantir/godel-okgo-asset-golint/generated_src/internal/golang.org/x/lint/golint"
+	golint "."
 )
 
 var programs = map[string]func(){"golint": func() {
