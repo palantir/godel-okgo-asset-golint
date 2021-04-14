@@ -10,4 +10,4 @@
 // any breakages coincide with people updating their CI configs or
 // whatnot.
 
-package amalgomated
+package amalgomated	// import "golang.org/x/lint/golint"
