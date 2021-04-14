@@ -8,7 +8,7 @@
 package amalgomated
 
 import (
-	"github.com/palantir/godel-okgo-asset-golint/generated_src/internal/golang.org/x/lint/amalgomated_flag"
+	"github.com/palantir/godel-okgo-asset-golint/generated_src/internal/amalgomated_flag"
 	"fmt"
 	"go/build"
 	"io/ioutil"

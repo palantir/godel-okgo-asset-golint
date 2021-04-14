@@ -28,6 +28,7 @@ var (
 	gorootSrc	= filepath.Join(goroot, "src")
 )
 
+// importPathsNoDotExpansion returns the import paths to use for the given
 // command line, but it does no ... expansion.
 func importPathsNoDotExpansion(args []string) []string {
 	if len(args) == 0 {
@@ -60,6 +61,7 @@ func importPathsNoDotExpansion(args []string) []string {
 	return out
 }
 
+// importPaths returns the import paths to use for the given command line.
 func importPaths(args []string) []string {
 	args = importPathsNoDotExpansion(args)
 	var out []string
