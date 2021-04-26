@@ -11,7 +11,7 @@ require (
 	github.com/palantir/pkg/cobracli v1.0.1
 	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.4.0
-	golang.org/x/lint v0.0.0-20200130185559-910be7a94367
-	golang.org/x/tools v0.0.0-20200227184634-afe1c6fc1b2a
+	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5
+	golang.org/x/tools v0.1.0
 	gopkg.in/yaml.v2 v2.4.0
 )
