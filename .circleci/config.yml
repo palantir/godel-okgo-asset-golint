@@ -3,8 +3,9 @@
 # To manually manage the CircleCI configuration for this project, remove the .circleci/template.sh file.
 
 executor: &executor
-  executor:
-    name: cimg/go:1.17.3
+  docker:
+    - image: cimg/go:1.17.3
+      working_directory: /home/circleci/go/src/github.com/palantir/godel-okgo-asset-golint
 
 version: 2.1
 
