@@ -2,14 +2,9 @@
 # To request a modification to the general template, file an issue on Excavator.
 # To manually manage the CircleCI configuration for this project, remove the .circleci/template.sh file.
 
-owner-repo: &owner-repo
-  owner-repo: palantir/godel-okgo-asset-golint
-
 executor: &executor
   executor:
-    name: go/golang
-    version: 1.17.3
-    <<: *owner-repo
+    name: cimg/go:1.17.3
 
 version: 2.1
 
