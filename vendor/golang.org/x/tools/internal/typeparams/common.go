@@ -16,11 +16,10 @@
 // Additionally, this package contains common utilities for working with the
 // new generic constructs, to supplement the standard library APIs. Notably,
 // the StructuralTerms API computes a minimal representation of the structural
-// restrictions on a type parameter. In the future, this API may be available
-// from go/types.
+// restrictions on a type parameter.
 //
-// See the example/README.md for a more detailed guide on how to update tools
-// to support generics.
+// An external version of these APIs is available in the
+// golang.org/x/exp/typeparams module.
 package typeparams
 
 import (
@@ -88,7 +87,6 @@ func IsTypeParam(t types.Type) bool {
 func OriginMethod(fn *types.Func) *types.Func {
 	recv := fn.Type().(*types.Signature).Recv()
 	if recv == nil {
-
 		return fn
 	}
 	base := recv.Type()
@@ -107,6 +105,26 @@ func OriginMethod(fn *types.Func) *types.Func {
 	}
 	orig := NamedTypeOrigin(named)
 	gfn, _, _ := types.LookupFieldOrMethod(orig, true, fn.Pkg(), fn.Name())
+
+	// This is a fix for a gopls crash (#60628) due to a go/types bug (#60634). In:
+	// 	package p
+	//      type T *int
+	//      func (*T) f() {}
+	// LookupFieldOrMethod(T, true, p, f)=nil, but NewMethodSet(*T)={(*T).f}.
+	// Here we make them consistent by force.
+	// (The go/types bug is general, but this workaround is reached only
+	// for generic T thanks to the early return above.)
+	if gfn == nil {
+		mset := types.NewMethodSet(types.NewPointer(orig))
+		for i := 0; i < mset.Len(); i++ {
+			m := mset.At(i)
+			if m.Obj().Id() == fn.Id() {
+				gfn = m.Obj()
+				break
+			}
+		}
+	}
+
 	return gfn.(*types.Func)
 }
 
@@ -121,15 +139,15 @@ func OriginMethod(fn *types.Func) *types.Func {
 //
 // For example, consider the following type declarations:
 //
-//  type Interface[T any] interface {
-//  	Accept(T)
-//  }
+//	type Interface[T any] interface {
+//		Accept(T)
+//	}
 //
-//  type Container[T any] struct {
-//  	Element T
-//  }
+//	type Container[T any] struct {
+//		Element T
+//	}
 //
-//  func (c Container[T]) Accept(t T) { c.Element = t }
+//	func (c Container[T]) Accept(t T) { c.Element = t }
 //
 // In this case, GenericAssignableTo reports that instantiations of Container
 // are assignable to the corresponding instantiation of Interface.
