@@ -1,0 +1,17 @@
+./godelw verify failed after updating godel plugins and assets
+
+Command that caused error:
+./godelw verify --skip-test --skip-check
+
+Output:
+Running format...
+Running mod...
+go: downloading golang.org/x/tools v0.1.10
+github.com/palantir/godel-okgo-asset-golint/generated_src/internal/golang.org/x/lint imports
+	golang.org/x/tools/go/ast/astutil: golang.org/x/tools@v0.1.10: read "https:/proxy.golang.org/@v/v0.1.10.zip": stream error: stream ID 1; NO_ERROR; received from peer
+github.com/palantir/godel-okgo-asset-golint/generated_src/internal/golang.org/x/lint imports
+	golang.org/x/tools/go/gcexportdata: golang.org/x/tools@v0.1.10: read "https:/proxy.golang.org/@v/v0.1.10.zip": stream error: stream ID 1; NO_ERROR; received from peer
+Running amalgomate...
+Running license...
+Failed tasks:
+	mod
