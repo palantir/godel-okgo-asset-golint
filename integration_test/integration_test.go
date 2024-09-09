@@ -59,6 +59,10 @@ func TestCheck(t *testing.T) {
 				Name: "lint failures",
 				Specs: []gofiles.GoFileSpec{
 					{
+						RelPath: "go.mod",
+						Src:     `module foo`,
+					},
+					{
 						RelPath: "foo.go",
 						Src:     `package foo; func Foo() int { return 0 }`,
 					},
@@ -74,6 +78,10 @@ Check(s) produced output: [golint]
 			{
 				Name: "lint failures from inner directory",
 				Specs: []gofiles.GoFileSpec{
+					{
+						RelPath: "go.mod",
+						Src:     `module foo`,
+					},
 					{
 						RelPath: "foo.go",
 						Src:     `package foo; func Foo() int { return 0 }`,
