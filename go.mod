@@ -3,14 +3,24 @@ module github.com/palantir/godel-okgo-asset-golint
 go 1.23.0
 
 require (
+	github.com/BurntSushi/toml v1.4.0
+	github.com/chavacava/garif v0.1.0
+	github.com/fatih/color v1.17.0
+	github.com/fatih/structtag v1.2.0
+	github.com/hashicorp/go-version v1.7.0
+	github.com/mgechev/dots v0.0.0-20210922191527-e955255bf517
+	github.com/mgechev/revive v1.4.0
+	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nmiyake/pkg/gofiles v1.2.0
+	github.com/olekukonko/tablewriter v0.0.5
 	github.com/palantir/amalgomate v1.45.0
 	github.com/palantir/godel/v2 v2.120.0
 	github.com/palantir/okgo v1.61.0
 	github.com/palantir/pkg/cobracli v1.2.0
 	github.com/pkg/errors v0.9.1
+	github.com/spf13/afero v1.11.0
 	github.com/stretchr/testify v1.9.0
-	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
+	golang.org/x/mod v0.21.0
 	golang.org/x/tools v0.26.0
 	gopkg.in/yaml.v2 v2.4.0
 )
@@ -21,14 +31,13 @@ require (
 	github.com/cheggaaa/pb/v3 v3.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
-	github.com/fatih/color v1.13.0 // indirect
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/klauspost/compress v1.11.4 // indirect
 	github.com/klauspost/pgzip v1.2.5 // indirect
-	github.com/mattn/go-colorable v0.1.12 // indirect
-	github.com/mattn/go-isatty v0.0.14 // indirect
-	github.com/mattn/go-runewidth v0.0.4 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mholt/archiver/v3 v3.5.1 // indirect
 	github.com/nmiyake/pkg/dirs v1.1.0 // indirect
 	github.com/nmiyake/pkg/errorstringer v1.1.0 // indirect
@@ -44,8 +53,8 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
-	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

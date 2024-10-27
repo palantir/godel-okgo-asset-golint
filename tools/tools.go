@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Copyright 2019 Palantir Technologies, Inc.
+// Copyright 2024 Palantir Technologies, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,5 +32,5 @@
 package tools
 
 import (
-	_ "golang.org/x/lint/golint"
+	_ "github.com/mgechev/revive"
 )

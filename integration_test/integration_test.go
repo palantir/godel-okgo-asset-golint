@@ -60,17 +60,21 @@ func TestCheck(t *testing.T) {
 				Specs: []gofiles.GoFileSpec{
 					{
 						RelPath: "go.mod",
-						Src:     `module foo`,
+						Src: `module foo
+
+go 1.23.0
+`,
 					},
 					{
 						RelPath: "foo.go",
-						Src:     `package foo; func Foo() int { return 0 }`,
+						Src: `// Package foo is a test package.
+package foo; func Foo() int { return 0 }`,
 					},
 				},
 				ConfigFiles: configFiles,
 				WantError:   true,
 				WantOutput: `Running golint...
-foo.go:1:14: exported function Foo should have comment or be unexported
+foo.go:2:14: exported function Foo should have comment or be unexported
 Finished golint
 Check(s) produced output: [golint]
 `,
@@ -80,11 +84,15 @@ Check(s) produced output: [golint]
 				Specs: []gofiles.GoFileSpec{
 					{
 						RelPath: "go.mod",
-						Src:     `module foo`,
+						Src: `module foo
+
+go 1.23.0
+`,
 					},
 					{
 						RelPath: "foo.go",
-						Src:     `package foo; func Foo() int { return 0 }`,
+						Src: `// Package foo is a test package.
+package foo; func Foo() int { return 0 }`,
 					},
 					{
 						RelPath: "inner/bar",
@@ -94,7 +102,7 @@ Check(s) produced output: [golint]
 				Wd:          "inner",
 				WantError:   true,
 				WantOutput: `Running golint...
-../foo.go:1:14: exported function Foo should have comment or be unexported
+../foo.go:2:14: exported function Foo should have comment or be unexported
 Finished golint
 Check(s) produced output: [golint]
 `,
