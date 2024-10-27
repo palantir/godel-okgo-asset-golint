@@ -1,4 +1,4 @@
 packages:
   golint:
-    main: golang.org/x/lint/golint
+    main: github.com/mgechev/revive
     distance-to-project-pkg: 1
