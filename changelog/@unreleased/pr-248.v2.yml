@@ -1,0 +1,10 @@
+type: fix
+fix:
+  description: |-
+    Improves the performance of the "golint" check by several orders of magnitude by downgrading the "golang.org/x/tools" module dependency from v0.26.0 -> v0.1.10.
+
+    This fixes the major performance regression introduced in version v1.37.0 of this check.
+
+    Because "golint" itself is deprecated/frozen, using not keeping this dependency up-to-date should not be an issue.
+  links:
+  - https://github.com/palantir/godel-okgo-asset-golint/pull/248
