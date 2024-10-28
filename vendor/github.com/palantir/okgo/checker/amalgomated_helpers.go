@@ -20,10 +20,12 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/kardianos/osext"
 	"github.com/palantir/amalgomate/amalgomated"
-	"github.com/palantir/godel/v2/framework/pluginapi"
-	"github.com/palantir/okgo/okgo"
+	"github.com/palantir/godel/framework/pluginapi"
 	"github.com/pkg/errors"
+
+	"github.com/palantir/okgo/okgo"
 )
 
 type AmalgomatedCheckerParam interface {
@@ -39,12 +41,6 @@ func (f paramFunc) apply(c *amalgomatedChecker) {
 func ParamPriority(priority okgo.CheckerPriority) AmalgomatedCheckerParam {
 	return paramFunc(func(c *amalgomatedChecker) {
 		c.priority = priority
-	})
-}
-
-func ParamMultiCPU(multiCPU okgo.CheckerMultiCPU) AmalgomatedCheckerParam {
-	return paramFunc(func(c *amalgomatedChecker) {
-		c.multiCPU = multiCPU
 	})
 }
 
@@ -83,7 +79,6 @@ func NewAmalgomatedChecker(typeName okgo.CheckerType, params ...AmalgomatedCheck
 type amalgomatedChecker struct {
 	typeName              okgo.CheckerType
 	priority              okgo.CheckerPriority
-	multiCPU              okgo.CheckerMultiCPU
 	lineParserWithWd      func(line, wd string) okgo.Issue
 	includeProjectDirFlag bool
 	args                  []string
@@ -95,10 +90,6 @@ func (c *amalgomatedChecker) Type() (okgo.CheckerType, error) {
 
 func (c *amalgomatedChecker) Priority() (okgo.CheckerPriority, error) {
 	return c.priority, nil
-}
-
-func (c *amalgomatedChecker) MultiCPU() (okgo.CheckerMultiCPU, error) {
-	return c.multiCPU, nil
 }
 
 func (c *amalgomatedChecker) Check(pkgPaths []string, projectDir string, stdout io.Writer) {
@@ -123,7 +114,7 @@ func (c *amalgomatedChecker) RunCheckCmd(args []string, stdout io.Writer) {
 }
 
 func AmalgomatedCheckCmd(amalgomatedCmdName string, args []string, stdout io.Writer) (*exec.Cmd, string) {
-	pathToSelf, err := os.Executable()
+	pathToSelf, err := osext.Executable()
 	if err != nil {
 		okgo.WriteErrorAsIssue(errors.Wrapf(err, "failed to determine path to executable"), stdout)
 		return nil, ""

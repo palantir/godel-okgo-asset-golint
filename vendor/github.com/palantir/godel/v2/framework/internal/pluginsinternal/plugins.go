@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
+	"path"
 	"sort"
 	"strings"
 
@@ -83,10 +83,10 @@ func ResolveAndVerify(
 	stdout io.Writer) (currLocator artifactresolver.Locator, ok bool) {
 
 	currLocator = currArtifact.LocatorWithChecksums.Locator
-	currDstPath := filepath.Join(dstBaseDir, pathsinternal.PluginFileName(currLocator))
+	currDstPath := path.Join(dstBaseDir, pathsinternal.PluginFileName(currLocator))
 
 	if _, err := os.Stat(currDstPath); os.IsNotExist(err) {
-		tgzDstPath := filepath.Join(downloadsDir, pathsinternal.PluginFileName(currLocator)+".tgz")
+		tgzDstPath := path.Join(downloadsDir, pathsinternal.PluginFileName(currLocator)+".tgz")
 		if err := artifactresolver.ResolveArtifactTGZ(currArtifact, defaultResolvers, osArch, tgzDstPath, stdout); err != nil {
 			artifactErrors[currLocator] = err
 			return currLocator, false

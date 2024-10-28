@@ -1,9 +1,6 @@
 package brotli
 
-import (
-	"math"
-	"math/bits"
-)
+import "math"
 
 /* Copyright 2013 Google Inc. All Rights Reserved.
 
@@ -14,7 +11,16 @@ import (
 /* Utilities for fast computation of logarithms. */
 
 func log2FloorNonZero(n uint) uint32 {
-	return uint32(bits.Len(n)) - 1
+	/* TODO: generalize and move to platform.h */
+	var result uint32 = 0
+	for {
+		n >>= 1
+		if n == 0 {
+			break
+		}
+		result++
+	}
+	return result
 }
 
 /* A lookup table for small values of log2(int) to be used in entropy
