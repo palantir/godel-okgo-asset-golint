@@ -4,7 +4,7 @@ plugins:
     - /Users/nmiyake/.m2/repository/{{GroupPath}}/{{Product}}/{{Version}}/{{Product}}-{{Version}}-{{OS}}-{{Arch}}.tgz
   plugins:
     - locator:
-        id: com.palantir.godel-amalgomate-plugin:amalgomate-plugin:1.43.0-7-gd385091
+        id: com.palantir.godel-amalgomate-plugin:amalgomate-plugin:1.43.0-8-g7f24e90
 #        checksums:
 #          darwin-amd64: b2f6a869a2cd9e733d229967d4db801986fdb9ca0bb6b0852dfc46f3eb3e45ba
 #          linux-amd64: d913e3013fab5804fbb12937000b8e665f19d1de8977250652de855ed6f9ecf9
