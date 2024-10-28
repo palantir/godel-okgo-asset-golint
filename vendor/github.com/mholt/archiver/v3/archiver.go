@@ -72,11 +72,6 @@ type ExtensionChecker interface {
 	CheckExt(name string) error
 }
 
-// FilenameChecker validates filenames to prevent path traversal attacks
-type FilenameChecker interface {
-	CheckPath(to, filename string) error
-}
-
 // Unarchiver is a type that can extract archive files
 // into a folder.
 type Unarchiver interface {
@@ -125,9 +120,6 @@ type File struct {
 type FileInfo struct {
 	os.FileInfo
 	CustomName string
-	// Stores path to the source.
-	// Used when reading a symlink.
-	SourcePath string
 }
 
 // Name returns fi.CustomName if not empty;

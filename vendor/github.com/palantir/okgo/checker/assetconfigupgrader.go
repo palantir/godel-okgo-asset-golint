@@ -19,8 +19,9 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/palantir/okgo/okgo"
 	"github.com/pkg/errors"
+
+	"github.com/palantir/okgo/okgo"
 )
 
 type assetConfigUpgrader struct {

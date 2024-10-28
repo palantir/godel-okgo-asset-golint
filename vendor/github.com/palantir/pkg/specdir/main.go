@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build module
 // +build module
 
 // This file exists only to smooth the transition for modules. Having this file makes it such that other modules that

@@ -19,7 +19,9 @@ package pluginapitester
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 
 	"github.com/palantir/godel/v2/framework/godellauncher"
@@ -75,12 +77,12 @@ func RunPlugin(
 			if err != nil {
 				return cleanup, errors.Wrapf(err, "failed to determine working directory")
 			}
-			projectDir = filepath.Join(wd, projectDir)
+			projectDir = path.Join(wd, projectDir)
 		}
 
-		godelwPath := filepath.Join(projectDir, "godelw")
+		godelwPath := path.Join(projectDir, "godelw")
 		if _, err := os.Stat(godelwPath); os.IsNotExist(err) {
-			if err := os.WriteFile(godelwPath, nil, 0644); err != nil {
+			if err := ioutil.WriteFile(godelwPath, nil, 0644); err != nil {
 				return cleanup, errors.Wrapf(err, "failed to create temporary godelw file")
 			}
 			cleanup = func() {
@@ -89,7 +91,7 @@ func RunPlugin(
 				}
 			}
 		}
-		globalConfig.Wrapper = filepath.Join(projectDir, "godelw")
+		globalConfig.Wrapper = path.Join(projectDir, "godelw")
 	}
 	return cleanup, task.Run(globalConfig, stdout)
 }

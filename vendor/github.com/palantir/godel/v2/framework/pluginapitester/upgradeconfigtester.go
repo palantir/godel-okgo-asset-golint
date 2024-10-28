@@ -20,7 +20,9 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"sort"
 	"testing"
@@ -94,12 +96,12 @@ func RunUpgradeConfig(
 			if err != nil {
 				return cleanup, errors.Wrapf(err, "failed to determine working directory")
 			}
-			projectDir = filepath.Join(wd, projectDir)
+			projectDir = path.Join(wd, projectDir)
 		}
 
-		godelwPath := filepath.Join(projectDir, "godelw")
+		godelwPath := path.Join(projectDir, "godelw")
 		if _, err := os.Stat(godelwPath); os.IsNotExist(err) {
-			if err := os.WriteFile(godelwPath, nil, 0644); err != nil {
+			if err := ioutil.WriteFile(godelwPath, nil, 0644); err != nil {
 				return cleanup, errors.Wrapf(err, "failed to create temporary godelw file")
 			}
 			cleanup = func() {
@@ -108,7 +110,7 @@ func RunUpgradeConfig(
 				}
 			}
 		}
-		globalConfig.Wrapper = filepath.Join(projectDir, "godelw")
+		globalConfig.Wrapper = path.Join(projectDir, "godelw")
 	}
 	return cleanup, task.Run(globalConfig, stdout)
 }
@@ -137,7 +139,7 @@ func RunUpgradeConfigTest(t *testing.T,
 	require.NoError(t, err)
 
 	for i, tc := range testCases {
-		projectDir, err := os.MkdirTemp(tmpDir, "")
+		projectDir, err := ioutil.TempDir(tmpDir, "")
 		require.NoError(t, err)
 
 		var sortedKeys []string
@@ -147,9 +149,9 @@ func RunUpgradeConfigTest(t *testing.T,
 		sort.Strings(sortedKeys)
 
 		for _, k := range sortedKeys {
-			err = os.MkdirAll(filepath.Dir(filepath.Join(projectDir, k)), 0755)
+			err = os.MkdirAll(path.Dir(path.Join(projectDir, k)), 0755)
 			require.NoError(t, err)
-			err = os.WriteFile(filepath.Join(projectDir, k), []byte(tc.ConfigFiles[k]), 0644)
+			err = ioutil.WriteFile(path.Join(projectDir, k), []byte(tc.ConfigFiles[k]), 0644)
 			require.NoError(t, err)
 		}
 
@@ -171,7 +173,7 @@ func RunUpgradeConfigTest(t *testing.T,
 			sort.Strings(sortedKeys)
 			for _, k := range sortedKeys {
 				wantContent := tc.WantFiles[k]
-				bytes, err := os.ReadFile(filepath.Join(projectDir, k))
+				bytes, err := ioutil.ReadFile(path.Join(projectDir, k))
 				require.NoError(t, err, "Case %d: %s", i, tc.Name)
 				assert.Equal(t, wantContent, string(bytes), "Case %d: %s\nContent of file %s did not match expectation.\nActual:\n%s", i, tc.Name, k, string(bytes))
 			}

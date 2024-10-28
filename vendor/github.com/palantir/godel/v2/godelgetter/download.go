@@ -19,8 +19,9 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
-	"path/filepath"
+	"path"
 
 	"github.com/cheggaaa/pb/v3"
 	"github.com/pkg/errors"
@@ -40,7 +41,7 @@ func DownloadIntoDirectory(pkgSrc PkgSrc, dstDir string, w io.Writer) (rPkg stri
 		return "", errors.Errorf("destination path %s exists, but is not a directory", dstDir)
 	}
 
-	dstFilePath := filepath.Join(dstDir, pkgSrc.Name())
+	dstFilePath := path.Join(dstDir, pkgSrc.Name())
 	if !pkgSrc.Same(dstFilePath) {
 		// download the source package to the destination
 		if err := Download(pkgSrc, dstFilePath, w); err != nil {
@@ -137,7 +138,7 @@ func copyWithProgress(w io.Writer, r io.Reader, dataLen int64, stdout io.Writer)
 }
 
 func computeSHA256Checksum(filename string) (string, error) {
-	bytes, err := os.ReadFile(filename)
+	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return "", errors.Wrapf(err, "failed to read file %s", filename)
 	}

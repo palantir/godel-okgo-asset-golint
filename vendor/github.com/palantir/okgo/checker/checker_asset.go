@@ -15,34 +15,47 @@
 package checker
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os/exec"
 	"strings"
 
-	"github.com/palantir/godel/v2/framework/pluginapi"
-	"github.com/palantir/okgo/okgo"
+	"github.com/palantir/godel/framework/pluginapi"
 	"github.com/pkg/errors"
+
+	"github.com/palantir/okgo/okgo"
 )
 
 type assetChecker struct {
-	assetPath       string
-	cfgYML          string
-	checkerType     okgo.CheckerType
-	checkerPriority okgo.CheckerPriority
-	checkerMultiCPU okgo.CheckerMultiCPU
+	assetPath string
+	cfgYML    string
 }
 
 func (c *assetChecker) Type() (okgo.CheckerType, error) {
-	return c.checkerType, nil
+	nameCmd := exec.Command(c.assetPath, typeCmdName)
+	outputBytes, err := runCommand(nameCmd)
+	if err != nil {
+		return "", err
+	}
+	var checkerType okgo.CheckerType
+	if err := json.Unmarshal(outputBytes, &checkerType); err != nil {
+		return "", errors.Wrapf(err, "failed to unmarshal JSON")
+	}
+	return checkerType, nil
 }
 
 func (c *assetChecker) Priority() (okgo.CheckerPriority, error) {
-	return c.checkerPriority, nil
-}
-
-func (c *assetChecker) MultiCPU() (okgo.CheckerMultiCPU, error) {
-	return c.checkerMultiCPU, nil
+	nameCmd := exec.Command(c.assetPath, priorityCmdName)
+	outputBytes, err := runCommand(nameCmd)
+	if err != nil {
+		return 0, err
+	}
+	var checkerPriority okgo.CheckerPriority
+	if err := json.Unmarshal(outputBytes, &checkerPriority); err != nil {
+		return 0, errors.Wrapf(err, "failed to unmarshal JSON")
+	}
+	return checkerPriority, nil
 }
 
 func (c *assetChecker) VerifyConfig() error {
