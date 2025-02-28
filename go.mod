@@ -15,6 +15,12 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 )
 
+// pin to version v0.1.10 of golang.org/x/tools because advancing beyond
+// this version introduces a major performance regression. First-class fix
+// for this would be to move off the deprecated golint check and to use a
+// replacement such as https://github.com/mgechev/revive.
+replace golang.org/x/tools => golang.org/x/tools v0.1.10
+
 require (
 	github.com/VividCortex/ewma v1.1.1 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
@@ -47,5 +53,6 @@ require (
 	golang.org/x/mod v0.23.0 // indirect
 	golang.org/x/sync v0.11.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
