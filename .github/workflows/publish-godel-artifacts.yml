@@ -3,10 +3,10 @@
 # To manually manage the CircleCI configuration for this project, remove the .circleci/template.sh file.
 
 name: publish-godel-artifacts
-on:
-  release:
-    types:
-      - created
+on: push
+#  release:
+#    types:
+#      - created
 
 jobs:
   run-godel-publish:
@@ -25,7 +25,7 @@ jobs:
           echo "GOPATH=$(go env GOPATH)" >> "$GITHUB_ENV"
           echo "Set GOPATH=$(go env GOPATH) in GITHUB_ENV at $GITHUB_ENV"
       - id: go-dist-info
-        uses: palantir/github-actions/go-dist-info@0.1.0
+        uses: palantir/github-actions/go-dist-info@0.2.0
         with:
           gopath: ${{ steps.set-gopath.outputs.GOPATH }}
           go-version: go1.24.3
@@ -37,7 +37,7 @@ jobs:
             ${{ steps.set-gopath.outputs.GOPATH }}/go-dists/${{ steps.go-dist-info.outputs.go-dist-version }}
           key: ${{ runner.os }}-${{ steps.go-dist-info.outputs.go-dist-version }}
       - id: go-dist-setup
-        uses: palantir/github-actions/go-dist-setup@0.1.0
+        uses: palantir/github-actions/go-dist-setup@0.2.0
         with:
           gopath: ${{ steps.set-gopath.outputs.gopath }}
           go-version: ${{ steps.go-dist-info.outputs.go-dist-version }}
@@ -57,4 +57,4 @@ jobs:
           key: ${{ runner.os }}-godel-${{ hashFiles('godelw', 'godel/config/godel.yml') }}
       - run: ./godelw mod
       - run: ./godelw dist
-      - run: ./godelw publish github --add-v-prefix --api-url=$GITHUB_API_URL --user=palantir --repository=godel-okgo-asset-golint --token=${{ secrets.GITHUB_TOKEN }}
+#      - run: ./godelw publish github --add-v-prefix --api-url=$GITHUB_API_URL --user=palantir --repository=godel-okgo-asset-golint --token=${{ secrets.GITHUB_TOKEN }}
