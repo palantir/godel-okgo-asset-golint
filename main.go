@@ -15,7 +15,9 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"runtime/pprof"
 
 	"github.com/palantir/amalgomate/amalgomated"
 	amalgomatedcheck "github.com/palantir/godel-okgo-asset-golint/generated_src"
@@ -25,12 +27,45 @@ import (
 	"github.com/palantir/pkg/cobracli"
 )
 
+const (
+	cpuProfilePublicFlagName  = "cpuprofile"
+	cpuProfilePrivateFlagName = "cpuprofile-private"
+)
+
 func main() {
+	// if cpuProfilePrivateFlagName flag is present, profile
+	if cpuProfileFlagVal, osArgs := getFlagVal(cpuProfilePrivateFlagName, os.Args); cpuProfileFlagVal != "" {
+		f, err := os.Create(cpuProfileFlagVal)
+		if err != nil {
+			_, _ = fmt.Fprintf(os.Stderr, "Failed to create CPU profile: %v\n", err)
+			os.Exit(1)
+		}
+		if err := pprof.StartCPUProfile(f); err != nil {
+			_, _ = fmt.Fprintf(os.Stderr, "Failed to start CPU profile: %v\n", err)
+			os.Exit(1)
+		}
+		defer pprof.StopCPUProfile()
+		os.Args = osArgs
+	}
+
 	os.Exit(amalgomated.RunApp(os.Args, nil, amalgomated.NewCmdLibrary(amalgomatedcheck.Instance()), checkMain))
 }
 
 func checkMain(osArgs []string) int {
+	var cpuProfileFlagVal string
+	cpuProfileFlagVal, osArgs = getFlagVal(cpuProfilePublicFlagName, osArgs)
 	os.Args = osArgs
-	rootCmd := checker.AssetRootCmd(creator.Golint(), config.UpgradeConfig, "run golint check")
+	rootCmd := checker.AssetRootCmd(creator.Golint(cpuProfileFlagVal), config.UpgradeConfig, "run golint check")
 	return cobracli.ExecuteWithDefaultParams(rootCmd)
+}
+
+func getFlagVal(flagName string, osArgs []string) (flagVal string, osArgsWithFlagAndValRemoved []string) {
+	for idx, arg := range osArgs {
+		if arg == "--"+flagName && idx+1 < len(osArgs) {
+			flagVal = osArgs[idx+1]
+			osArgs = append(osArgs[:idx], osArgs[idx+2:]...)
+			break
+		}
+	}
+	return flagVal, osArgs
 }
