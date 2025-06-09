@@ -15,23 +15,27 @@
 package creator
 
 import (
+	"os"
+	"os/exec"
+	"strings"
+
 	"github.com/palantir/godel-okgo-asset-golint/golint"
 	"github.com/palantir/okgo/checker"
 	"github.com/palantir/okgo/okgo"
 )
 
-func Golint(cpuProfileFlagVal string) checker.Creator {
+func Golint() checker.Creator {
 	return checker.NewCreator(
 		golint.TypeName,
 		golint.Priority,
 		func(cfgYML []byte) (okgo.Checker, error) {
-			params := []checker.AmalgomatedCheckerParam{
-				checker.ParamPriority(golint.Priority),
+			// set GOROOT environment variable if it is not set
+			if _, ok := os.LookupEnv("GOROOT"); !ok {
+				if gorootOutput, err := exec.Command("go", "env", "GOROOT").CombinedOutput(); err == nil {
+					_ = os.Setenv("GOROOT", strings.TrimSpace(string(gorootOutput)))
+				}
 			}
-			if cpuProfileFlagVal != "" {
-				params = append(params, checker.ParamArgs("--cpuprofile-private", cpuProfileFlagVal))
-			}
-			return checker.NewAmalgomatedChecker(golint.TypeName, params...), nil
+			return checker.NewAmalgomatedChecker(golint.TypeName, checker.ParamPriority(golint.Priority)), nil
 		},
 	)
 }
