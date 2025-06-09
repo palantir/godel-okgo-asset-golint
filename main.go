@@ -33,22 +33,32 @@ const (
 )
 
 func main() {
+	os.Exit(runMain())
+}
+
+// runMain is the functional equivalent of the main function and returns an int exit code. Making this a separate
+// function ensures that the defer call is executed before the program exits (os.Exit does not run deferred functions).
+func runMain() int {
 	// if cpuProfilePrivateFlagName flag is present, profile
 	if cpuProfileFlagVal, osArgs := getFlagVal(cpuProfilePrivateFlagName, os.Args); cpuProfileFlagVal != "" {
 		f, err := os.Create(cpuProfileFlagVal)
 		if err != nil {
 			_, _ = fmt.Fprintf(os.Stderr, "Failed to create CPU profile: %v\n", err)
-			os.Exit(1)
+			return 1
 		}
 		if err := pprof.StartCPUProfile(f); err != nil {
 			_, _ = fmt.Fprintf(os.Stderr, "Failed to start CPU profile: %v\n", err)
-			os.Exit(1)
+			return 1
 		}
-		defer pprof.StopCPUProfile()
+		defer func() {
+			pprof.StopCPUProfile()
+			if err := f.Close(); err != nil {
+				_, _ = fmt.Fprintf(os.Stderr, "Failed to close CPU profile file: %v\n", err)
+			}
+		}()
 		os.Args = osArgs
 	}
-
-	os.Exit(amalgomated.RunApp(os.Args, nil, amalgomated.NewCmdLibrary(amalgomatedcheck.Instance()), checkMain))
+	return amalgomated.RunApp(os.Args, nil, amalgomated.NewCmdLibrary(amalgomatedcheck.Instance()), checkMain)
 }
 
 func checkMain(osArgs []string) int {

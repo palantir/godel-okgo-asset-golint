@@ -1,0 +1,5 @@
+type: fix
+fix:
+  description: Ensure that profile is written before program exits
+  links:
+  - https://github.com/palantir/godel-okgo-asset-golint/pull/307
