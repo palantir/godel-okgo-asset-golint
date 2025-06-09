@@ -1,0 +1,8 @@
+type: fix
+fix:
+  description: |-
+    Updates `golint` check to set the GOROOT environment variable to the output of `go env GOROOT` if it is not set. This fixes an issue where, otherwise, GOROOT would fall back to the value set by the `go` executable when the check was built, which is not helpful.
+
+    Also removes the flag to profile the check.
+  links:
+  - https://github.com/palantir/godel-okgo-asset-golint/pull/308
