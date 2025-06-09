@@ -1,0 +1,5 @@
+type: feature
+feature:
+  description: Adds support for using `--cpuprofile` flag to record a CPU profile.
+  links:
+  - https://github.com/palantir/godel-okgo-asset-golint/pull/306

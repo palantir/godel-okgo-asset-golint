@@ -20,12 +20,18 @@ import (
 	"github.com/palantir/okgo/okgo"
 )
 
-func Golint() checker.Creator {
+func Golint(cpuProfileFlagVal string) checker.Creator {
 	return checker.NewCreator(
 		golint.TypeName,
 		golint.Priority,
 		func(cfgYML []byte) (okgo.Checker, error) {
-			return checker.NewAmalgomatedChecker(golint.TypeName, checker.ParamPriority(golint.Priority)), nil
+			params := []checker.AmalgomatedCheckerParam{
+				checker.ParamPriority(golint.Priority),
+			}
+			if cpuProfileFlagVal != "" {
+				params = append(params, checker.ParamArgs("--cpuprofile-private", cpuProfileFlagVal))
+			}
+			return checker.NewAmalgomatedChecker(golint.TypeName, params...), nil
 		},
 	)
 }
