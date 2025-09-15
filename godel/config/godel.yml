@@ -22,7 +22,7 @@ environment:
 exclude:
   names:
     - \..+
-  paths:
-    - generated_src
-    - godel
     - vendor
+    - generated_src
+  paths:
+    - godel
