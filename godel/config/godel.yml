@@ -5,9 +5,7 @@ plugins:
     - locator:
         id: com.palantir.godel-amalgomate-plugin:amalgomate-plugin:1.66.0
         checksums:
-          darwin-amd64: 0d3d6ecdca5c29ee82b9f0e09218c4f04f7ce918bef3e5e1d6f5da22aae09ea0
           darwin-arm64: 84c42763748e6742e71616e6fcd84a1796b802b2223effc4d79da2d9268f083c
-          linux-amd64: 991096ceb8255b0533c0e59b105ea331ef7a71849d16753be748198ef613757c
           linux-arm64: 412e303c06f951c9ef1610ca579673464cd6e82a8e25d6cda0aa76d180b7be45
     - locator:
         id: com.palantir.godel-mod-plugin:mod-plugin:1.63.0
